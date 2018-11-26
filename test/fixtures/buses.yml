@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  prefix: MyString
+  line: MyString
+  load: MyString
+  arrival_time: MyString
+  py: 1.5
+  px: 1.5
+
+two:
+  prefix: MyString
+  line: MyString
+  load: MyString
+  arrival_time: MyString
+  py: 1.5
+  px: 1.5
