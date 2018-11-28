@@ -1,34 +1,46 @@
 class BusesController < ApplicationController
-  before_action :set_bus, only: [:show, :update, :destroy]
+  # before_action :set_bus, only: [:show, :update, :destroy]
 
   # GET /buses
   def index
     @buses = Bus.all
-
     render json: @buses
   end
 
   # GET /buses/1
   def show
-    render json: @bus
+    prefix = params[:id]
+    @bus = Bus.where(prefix: prefix)
+    if !@bus.nil?
+      render json: @bus[0]
+    else
+      render json: 'Error', status: :not_found
+      404
+    end
   end
 
   # POST /buses
   def create
     @bus = Bus.new(bus_params)
-    if @bus.save
-      render json: @bus, status: :created, location: @bus
-      200
+    if Bus.where(prefix: @bus.prefix).count >= 1
+      @bus = Bus.where(prefix: @bus.prefix)[0]
+      @bus.update(bus_params)
     else
-      render json: @bus.errors, status: :unprocessable_entity
-      500
+    # procurar por ônibus com mesmo prefixo, se não achar criar, se achar update
+      if @bus.save
+        render json: @bus, status: :created, location: @bus
+        200
+      else
+        render json: @bus.errors, status: :unprocessable_entity
+        500
+      end
     end
   end
 
   def update_load
-    puts "busein"
-    # @bus = Bus.find_by(prefix:params[:prefix])
-    puts "busao"
+    # puts "busein"
+    @bus = Bus.find_by(prefix:params[:prefix])
+    # puts "busao"
     redirect_to buses_update_path
   end
 
