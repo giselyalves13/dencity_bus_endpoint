@@ -3,8 +3,19 @@ class BusesController < ApplicationController
 
   # GET /buses
   def index
-    @buses = Bus.all
-    render json: @buses
+    if params[:id]
+      prefix = params[:id]
+      @bus = Bus.where(prefix: prefix)
+      if !@bus.nil?
+        render json: @bus[0]
+      else
+        render json: 'Error', status: :not_found
+        404
+      end
+    else
+      @buses = Bus.all
+      render json: @buses
+    end
   end
 
   # GET /buses/1
